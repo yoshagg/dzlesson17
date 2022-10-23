@@ -1,11 +1,10 @@
-# app.py
-
-from flask import Flask, request
+from flask import request
 from flask_restx import Api, Resource
-from schemas import MovieSchema, DirectorSchema, GenreSchema
+from schemas import MovieSchema
+import json
 
 from config import app, db
-from models import Movie, Director, Genre
+from models import Movie
 
 api = Api(app)
 
@@ -45,8 +44,8 @@ class MoviesViews(Resource):
 class MoviesViews(Resource):
     def get(self, id):
         result = Movie.query.filter(Movie.id == id).one()
-        if len(result):
-            return MovieSchema.dump(result[0]), 200
+        if result != "":
+            return MovieSchema.dump(result), 200
         else:
             return json.dumps({}), 200
 
