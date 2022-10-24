@@ -19,11 +19,11 @@ class MoviesViews(Resource):
         director_id = request.args.get("director_id")
         genre_id = request.args.get("genre_id")
         query = Movie.query
-        if director_id:
+        if director_id is not None:
             query = query.filter(Movie.director_id == director_id)
-        if genre_id:
+        if genre_id is not None:
             query = query.filter(Movie.genre_id == genre_id)
-        return MovieSchema(many=True).dump(Movie.query.all()), 200
+        return MovieSchema(many=True).dump(query.all()), 200
 
 
     def post(self):
@@ -44,7 +44,7 @@ class MoviesViews(Resource):
 class MoviesViews(Resource):
     def get(self, id):
         result = Movie.query.filter(Movie.id == id).one()
-        if result != "":
+        if result:
             return MovieSchema.dump(result), 200
         else:
             return json.dumps({}), 200
